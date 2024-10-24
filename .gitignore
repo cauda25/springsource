@@ -67,7 +67,7 @@ buildNumber.properties
 
 # End of https://www.toptal.com/developers/gitignore/api/visualstudiocode,java,maven
 */.gitattributes
-projact1/.gitignore
-projact1/mvnw
-projact1/mvnw.cmd
-projact1/.mvn/wrapper/maven-wrapper.properties
+*/.gitignore
+*/mvnw
+*/mvnw.cmd
+*/.mvn/wrapper/maven-wrapper.properties
