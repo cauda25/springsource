@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <h1>login</h1>
+    <form action="" method="post">
+      <div>
+        <lable for="userid">userid</lable>
+        <input type="text" name="userid" id="userid" th:value="${result}" />
+      </div>
+      <div>
+        <lable for="password">password</lable>
+        <input type="password" name="password" id="password" />
+      </div>
+      <div>
+        <button>로그인</button>
+      </div>
+    </form>
+    <ul>
+      <!-- redirect 사용으로 모델에 담지 못하여 불러오지 않음 -->
+      <li>아이디 : <span th:text="${memberDTO?.userid}"></span></li>
+      <li>비밀번호 : <span th:text="${memberDTO?.password}"></span></li>
+    </ul>
+  </body>
+</html>
