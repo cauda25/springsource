@@ -2,6 +2,8 @@ package com.example.projact1.controller;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.LongStream;
 
@@ -54,6 +56,11 @@ public class HomeController {
                 });
 
         model.addAttribute("list", list);
+
+        model.addAttribute("now", new Date());
+        model.addAttribute("price", 123456789);
+        model.addAttribute("options", Arrays.asList("AAAA", "BBBB", "CCCC", "DDDD"));
+        model.addAttribute("title", "This is a just sample");
         return "index";
     }
 
