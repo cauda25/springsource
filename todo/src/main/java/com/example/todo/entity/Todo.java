@@ -21,7 +21,7 @@ import lombok.NoArgsConstructor;
 @SequenceGenerator(name = "todo_seq_gen", sequenceName = "todo_seq", allocationSize = 1)
 // @DynamicInsert // default 값 동작
 @Entity(name = "todotbl")
-public class Todo {
+public class Todo extends BaseEntity {
 
     // embedded database (H2, HSQL or Derby), please put it on the classpath
     // ==> application.properties 설정 필요
