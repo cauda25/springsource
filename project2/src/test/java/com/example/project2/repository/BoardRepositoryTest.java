@@ -42,4 +42,10 @@ public class BoardRepositoryTest {
         boardRepository.deleteById(5l);
     }
 
+    @Test
+    public void testTitleList() {
+        boardRepository.findByTitle("Test Title...").forEach(i -> System.out.println(i));
+        boardRepository.findByTitleLike("Test Title...").forEach(i -> System.out.println(i));
+    }
+
 }
