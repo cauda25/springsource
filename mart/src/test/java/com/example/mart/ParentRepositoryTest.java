@@ -9,8 +9,8 @@ import org.springframework.test.annotation.Commit;
 
 import com.example.mart.entity.cascade.Child;
 import com.example.mart.entity.cascade.Parent;
-import com.example.mart.repository.ChildRepositoty;
-import com.example.mart.repository.ParentRepositoty;
+import com.example.mart.repository.cascade.ChildRepositoty;
+import com.example.mart.repository.cascade.ParentRepositoty;
 
 import jakarta.transaction.Transactional;
 

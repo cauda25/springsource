@@ -5,7 +5,12 @@ import java.util.stream.LongStream;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.book.entity.Book;
@@ -64,14 +69,14 @@ public class BookRepository {
     @Test
     public void bookIsert() {
 
-        LongStream.rangeClosed(1, 10).forEach(i -> {
+        LongStream.rangeClosed(1, 100).forEach(i -> {
 
             long num = ((int) (Math.random() * 5) + 1);
             Book book = Book.builder()
                     .title("title " + i)
                     .writer("writer " + i)
                     .price((int) (15000 * i))
-                    .salePrice((int) (15000 * i + 0.9))
+                    .salePrice((int) (15000 * i * 0.9))
                     .category(Category.builder().id(num).build())
                     .publisher(Publisher.builder().id(num).build())
                     .build();
@@ -113,4 +118,35 @@ public class BookRepository {
     public void delete() {
         bookRepository.deleteById(10L);
     }
+
+    // 페이지 나누기
+    @Test
+    public void testPage() {
+        // Pageable : 스프링 부트에서 제공하는 페이지 처리 객체
+
+        // Pageable pageable = PageRequest.of(0,20,Direction.DESC);
+        Pageable pageable = PageRequest.of(0, 20, Sort.by("id").descending());
+        Page<Book> result = bookRepository.findAll(bookRepository.makePredicate(null, null), pageable);
+
+        System.out.println("TotalElements " + result.getTotalElements());
+        System.out.println("TotalPages " + result.getTotalPages());
+        result.getContent().forEach(book -> System.out.println(book));
+
+    }
+
+    // 페이지 검색
+    @Test
+    public void testPageSearch() {
+        // Pageable : 스프링 부트에서 제공하는 페이지 처리 객체
+
+        // Pageable pageable = PageRequest.of(0,20,Direction.DESC);
+        Pageable pageable = PageRequest.of(0, 20, Sort.by("id").descending());
+        Page<Book> result = bookRepository.findAll(bookRepository.makePredicate("c", "소설"), pageable);
+
+        System.out.println("TotalElements " + result.getTotalElements());
+        System.out.println("TotalPages " + result.getTotalPages());
+        result.getContent().forEach(book -> System.out.println(book));
+
+    }
+
 }

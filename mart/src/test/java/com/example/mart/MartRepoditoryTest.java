@@ -1,6 +1,8 @@
 package com.example.mart;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.List;
 import java.util.stream.LongStream;
 
 import org.junit.jupiter.api.Test;
@@ -80,8 +82,8 @@ public class MartRepoditoryTest {
 
     @Test
     public void orderInsertTest() {
-        Member member = memberRepository.findById(1L).get();
-        Item item = itemRepository.findById(2L).get();
+        Member member = memberRepository.findById(2L).get();
+        Item item = itemRepository.findById(8L).get();
 
         Order order = Order.builder()
                 .orderDate(LocalDateTime.now())
@@ -93,6 +95,22 @@ public class MartRepoditoryTest {
         OrderItem orderItem = OrderItem.builder()
                 .price(200000)
                 .count(2)
+                .order(order)
+                .item(item)
+                .build();
+        orderItemRepository.save(orderItem);
+
+        // item 수량 감소
+    }
+
+    @Test
+    public void orderItemInsertTest() {
+        Item item = itemRepository.findById(8L).get();
+        Order order = Order.builder().id(2L).build();
+
+        OrderItem orderItem = OrderItem.builder()
+                .price(500000)
+                .count(3)
                 .order(order)
                 .item(item)
                 .build();
@@ -233,6 +251,41 @@ public class MartRepoditoryTest {
         System.out.println(delivery);
         System.out.println(delivery.getOrder());
 
+    }
+
+    // querydsl
+    @Test
+    public void testMembers() {
+        System.out.println(orderRepository.members());
+    }
+
+    @Test
+    public void testItems() {
+        System.out.println(orderRepository.items());
+    }
+
+    @Test
+    public void testJoin() {
+        List<Object[]> result = orderRepository.joinTest();
+
+        for (Object[] objects : result) {
+            System.out.println(Arrays.toString(objects));
+            System.out.println((Order) objects[0]);
+            System.out.println((Member) objects[1]);
+            System.out.println((OrderItem) objects[2]);
+        }
+    }
+
+    @Test
+    public void testSudQuery() {
+        List<Object[]> result = orderRepository.subQueryTest();
+
+        for (Object[] objects : result) {
+            // System.out.println(Arrays.toString(objects));
+            System.out.println((Order) objects[0]);
+            System.out.println((Member) objects[1]);
+            System.out.println((Long) objects[2]);
+        }
     }
 
 }

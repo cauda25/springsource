@@ -50,4 +50,9 @@ public class MemoRepositoryTest {
         memoRepository.deleteById(31L);
     }
 
+    @Test
+    public void test() {
+        memoRepository.findByMenoLessThan(22L).forEach(i -> System.out.println(i));
+    }
+
 }
