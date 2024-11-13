@@ -94,6 +94,10 @@
     </form>
     <form action="" method="post" id="actionForm">
       <input type="hidden" name="id" th:value="${dto.id}" />
+      <input type="hidden" name="page" th:value="${rqdto.page}" />
+      <input type="hidden" name="size" th:value="${rqdto.size}" />
+      <input type="hidden" name="type" th:value="${rqdto.type}" />
+      <input type="hidden" name="keyword" th:value="${rqdto.keyword}" />
     </form>
   </div>
   <th:block layout:fragment="script">

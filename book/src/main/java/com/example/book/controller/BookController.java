@@ -36,32 +36,47 @@ public class BookController {
     private final BookService bookService;
 
     @GetMapping("/list")
-    public void getMethodName(PageRequestDTO requestDTO, Model model) {
-        log.info("list 요청");
+    public void getMethodName(@ModelAttribute(name = "rqdto") PageRequestDTO requestDTO, Model model) {
+        log.info("list 요청 {}", requestDTO);
         PageResultDTO<BookDTO, Book> result = bookService.getList(requestDTO);
         model.addAttribute("result", result);
+
     }
 
     @GetMapping(value = { "/read", "/modify" })
-    public void getRead(Long id, Model model) {
+    public void getRead(Long id, @ModelAttribute(name = "rqdto") PageRequestDTO requestDTO, Model model) {
         log.info("도서 조회 요청");
         BookDTO dto = bookService.getRow(id);
         model.addAttribute("dto", dto);
+
     }
 
     @PostMapping("/modify")
-    public String postModify(BookDTO dto, RedirectAttributes rttr) {
+    public String postModify(BookDTO dto, @ModelAttribute(name = "rqdto") PageRequestDTO requestDTO,
+            RedirectAttributes rttr) {
         log.info("도서 변경 요청 {}", dto);
+        log.info("requestDTO {}", requestDTO);
         Long id = bookService.update(dto);
 
         rttr.addAttribute("id", id);
+        rttr.addAttribute("page", requestDTO.getPage());
+        rttr.addAttribute("size", requestDTO.getSize());
+        rttr.addAttribute("type", requestDTO.getType());
+        rttr.addAttribute("keyword", requestDTO.getKeyword());
         return "redirect:read";
     }
 
     @PostMapping("/remove")
-    public String postMethodName(@RequestParam Long id) {
+    public String postMethodName(@RequestParam Long id, @ModelAttribute(name = "rqdto") PageRequestDTO requestDTO,
+            RedirectAttributes rttr) {
         log.info("도서 삭제 요청 {}", id);
+        log.info("requestDTO {}", requestDTO);
         bookService.delete(id);
+
+        rttr.addAttribute("page", requestDTO.getPage());
+        rttr.addAttribute("size", requestDTO.getSize());
+        rttr.addAttribute("type", requestDTO.getType());
+        rttr.addAttribute("keyword", requestDTO.getKeyword());
 
         return "redirect:list";
     }

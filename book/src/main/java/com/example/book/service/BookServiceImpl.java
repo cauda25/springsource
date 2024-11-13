@@ -55,7 +55,8 @@ public class BookServiceImpl implements BookService {
 
         // 페이지 나누기 개념 추가
         Pageable pageable = requestDTO.getPageable(Sort.by("id").descending());
-        Page<Book> result = bookRepsitory.findAll(bookRepsitory.makePredicate(null, null), pageable);
+        Page<Book> result = bookRepsitory
+                .findAll(bookRepsitory.makePredicate(requestDTO.getType(), requestDTO.getKeyword()), pageable);
 
         Function<Book, BookDTO> fn = (en -> entityToDto(en));
         return new PageResultDTO<>(result, fn);

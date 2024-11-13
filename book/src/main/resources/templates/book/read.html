@@ -103,8 +103,16 @@
         </div>
       </div>
       <div>
-        <a th:href="@{modify(id=${dto.id})}" class="btn btn-primary">수정</a>
-        <a th:href="@{list}" class="btn btn-secondary">목록</a>
+        <a
+          th:href="@{modify(id=${dto.id},page=${rqdto.page},size=${rqdto.size},type=${rqdto.type},keyword=${rqdto.keyword})}"
+          class="btn btn-primary"
+          >수정</a
+        >
+        <a
+          th:href="@{list(page=${rqdto.page},size=${rqdto.size},type=${rqdto.type},keyword=${rqdto.keyword})}"
+          class="btn btn-secondary"
+          >목록</a
+        >
       </div>
     </form>
   </div>

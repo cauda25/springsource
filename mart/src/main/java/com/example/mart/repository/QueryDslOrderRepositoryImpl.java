@@ -40,7 +40,7 @@ public class QueryDslOrderRepositoryImpl extends QuerydslRepositorySupport imple
         // select * from item where name = 'POWER' and price > 10000
         QItem qItem = QItem.item;
         JPQLQuery<Item> tuple = from(qItem)
-                .where(qItem.name.eq("POWER").and(qItem.price.gt(10000)))
+                .where(qItem.name.eq("글래디에이터2").and(qItem.price.gt(10000)))
                 .select(qItem);
 
         System.out.println("tuple " + tuple);
