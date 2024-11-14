@@ -11,7 +11,7 @@ public class HomeController {
 
     @GetMapping("/")
     public String getMethodName() {
-        return "guestbook/list";
+        return "redirect:/guestbook/list";
     }
 
 }

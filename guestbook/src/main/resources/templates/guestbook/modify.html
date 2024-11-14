@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en" layout:decorate="~{/layouts/layout}">
+  <div layout:fragment="content">
+    <form action="" method="post">
+      <h2>GuestBook Modify Page</h2>
+
+      <div class="mb-3">
+        <label for="gno">Gno</label>
+        <input
+          type="text"
+          name="gno"
+          id="gno"
+          class="form-control"
+          th:value="${dto.gno}"
+          readonly
+        />
+      </div>
+      <div class="mb-3">
+        <label for="title">Title</label>
+        <input
+          type="text"
+          name="title"
+          id="title"
+          class="form-control"
+          th:value="${dto.title}"
+        />
+      </div>
+      <div class="mb-3">
+        <label for="content">Content</label>
+        <textarea
+          style="height: 200px"
+          name="content"
+          id="content"
+          class="form-control"
+          th:text="${dto.content}"
+        ></textarea>
+      </div>
+      <div class="mb-3">
+        <label for="writer">Writer</label>
+        <input
+          type="text"
+          name="writer"
+          id="writer"
+          class="form-control"
+          th:value="${dto.writer}"
+        />
+      </div>
+      <div>
+        <button class="btn btn-primary" type="submit">Modify</button>
+        <button class="btn btn-danger" type="button">Remove</button>
+        <button class="btn btn-info" type="button">List</button>
+      </div>
+    </form>
+    <form th:action="@{list}" method="post" id="actionFrom">
+      <input type="hidden" name="gno" th:value="${dto.gno}" />
+      <input type="hidden" name="page" th:value="${requestDTO.page}" />
+      <input type="hidden" name="size" th:value="${requestDTO.size}" />
+      <input type="hidden" name="type" th:value="${requestDTO.type}" />
+      <input type="hidden" name="keyword" th:value="${requestDTO.keyword}" />
+    </form>
+  </div>
+  <th:bcolk layout:fragment="script">
+    <script th:src="@{/js/modify.js}"></script>
+  </th:bcolk>
+</html>
