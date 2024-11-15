@@ -1,5 +1,7 @@
 package com.example.board.repositoryTest;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.stream.IntStream;
 import java.util.stream.LongStream;
 import java.util.stream.Stream;
@@ -7,6 +9,10 @@ import java.util.stream.Stream;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 
 import com.example.board.entity.Board;
 import com.example.board.entity.Member;
@@ -79,4 +85,79 @@ public class BoardRepositoryTest {
             replyRepository.save(reply);
         });
     }
+
+    @Transactional
+    @Test
+    public void testReadBoard() {
+        Board br = boardRepository.findById(100L).get();
+        System.out.println(br);
+
+        // 객체 그래프 탐색 : Board,Member (N:1)
+        System.out.println(br.getWriter());
+    }
+
+    @Transactional
+    @Test
+    public void testReadReply() {
+        Reply re = replyRepository.findById(100L).get();
+        System.out.println(re);
+
+        // 객체 그래프 탐색 : Reply,Board (N:1)
+        // 원본글 조회
+        System.out.println(re.getBoard());
+    }
+
+    @Transactional
+    @Test
+    public void testReadBoardReply() {
+        Board br = boardRepository.findById(99L).get();
+        System.out.println(br);
+
+        System.out.println(br.getReplies());
+
+    }
+
+    @Test
+    public void testJoin() {
+        List<Object[]> result = boardRepository.list();
+
+        for (Object[] objects : result) {
+            System.out.println(Arrays.toString(objects));
+            // Board board = (Board) objects[0];
+            // Member member = (Member) objects[1];
+            // Long replyCnt = (Long)objects[3];
+        }
+
+    }
+
+    @Test
+    public void testJoinList() {
+        Pageable pageable = PageRequest.of(0, 10, Sort.by("bno").descending());
+        // Pageable pageable = PageRequest.of(0, 10,
+        // Sort.by("bno").descending()
+        // .and(Sort.by("title").descending()));
+
+        Page<Object[]> result = boardRepository.list("tc", "content", pageable);
+
+        for (Object[] objects : result) {
+            System.out.println(Arrays.toString(objects));
+
+        }
+
+    }
+
+    @Test
+    public void testRow() {
+
+        Object[] objects = boardRepository.getBoardByBno(100L);
+        System.out.println(Arrays.toString(objects));
+    }
+
+    @Transactional
+    @Test
+    public void testReplyRemove() {
+        // replyRepository.deleteByBno(4L);
+        boardRepository.deleteById(2L);
+    }
+
 }
