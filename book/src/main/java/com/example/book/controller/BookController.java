@@ -82,7 +82,8 @@ public class BookController {
     }
 
     @GetMapping("/create")
-    public void getcCreate(@ModelAttribute("dto") BookDTO dto, Model model) {
+    public void getcCreate(@ModelAttribute("dto") BookDTO dto,
+            @ModelAttribute(name = "rqdto") PageRequestDTO requestDTO, Model model) {
         log.info("도서 등록 폼 요청");
 
         List<CategoryDTO> c = bookService.getCateList();
@@ -93,7 +94,8 @@ public class BookController {
     }
 
     @PostMapping("/create")
-    public String postCreate(@Valid @ModelAttribute("dto") BookDTO dto, BindingResult result, Model model,
+    public String postCreate(@Valid @ModelAttribute("dto") BookDTO dto, BindingResult result,
+            @ModelAttribute(name = "rqdto") PageRequestDTO requestDTO, Model model,
             RedirectAttributes rttr) {
         log.info("도서 등록 요청 {}", dto);
         List<CategoryDTO> c = bookService.getCateList();

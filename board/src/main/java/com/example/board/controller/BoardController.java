@@ -1,7 +1,9 @@
 package com.example.board.controller;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -16,6 +18,9 @@ import com.example.board.dto.PageRequestDTO;
 import com.example.board.dto.PageResultDTO;
 import com.example.board.repository.search.SearchBoardRepoditory;
 import com.example.board.service.BoardService;
+
+import jakarta.validation.Valid;
+
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -56,6 +61,45 @@ public class BoardController {
         rttr.addAttribute("type", requestDTO.getType());
         rttr.addAttribute("keyword", requestDTO.getKeyword());
         return "redirect:read";
+    }
+
+    // @Transactional
+    @PostMapping("/remove")
+    public String postRemove(@RequestParam Long bno, @ModelAttribute(name = "requestDTO") PageRequestDTO requestDTO,
+            RedirectAttributes rttr) {
+        log.info("삭제 요청 {}", bno);
+        boardService.delete(bno);
+        rttr.addAttribute("page", requestDTO.getPage());
+        rttr.addAttribute("size", requestDTO.getSize());
+        rttr.addAttribute("type", requestDTO.getType());
+        rttr.addAttribute("keyword", requestDTO.getKeyword());
+
+        return "redirect:list";
+    }
+
+    @GetMapping("/create")
+    public void getMethodName(@ModelAttribute("dto") BoardDTO dto,
+            @ModelAttribute(name = "requestDTO") PageRequestDTO requestDTO) {
+        log.info("작성 폼 요청");
+    }
+
+    @PostMapping("/create")
+    public String postMethodName(@Valid @ModelAttribute("dto") BoardDTO dto, BindingResult result,
+            @ModelAttribute(name = "requestDTO") PageRequestDTO requestDTO,
+            RedirectAttributes rttr) {
+        log.info("작성 등록 요청 {}", dto);
+        if (result.hasErrors()) {
+            return "/board/create";
+        }
+
+        Long bno = boardService.register(dto);
+        rttr.addAttribute("bno", bno);
+        rttr.addAttribute("page", requestDTO.getPage());
+        rttr.addAttribute("size", requestDTO.getSize());
+        rttr.addAttribute("type", requestDTO.getType());
+        rttr.addAttribute("keyword", requestDTO.getKeyword());
+
+        return "redirect:/board/read";
     }
 
 }

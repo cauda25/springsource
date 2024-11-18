@@ -13,7 +13,10 @@ import com.example.board.dto.PageResultDTO;
 import com.example.board.entity.Board;
 import com.example.board.entity.Member;
 import com.example.board.repository.BoardRepository;
+import com.example.board.repository.MemberRepository;
+import com.example.board.repository.ReplyRepository;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
@@ -23,11 +26,14 @@ import lombok.extern.log4j.Log4j2;
 public class BoradServiceImpl implements BoardService {
 
     private final BoardRepository boardRepository;
+    private final ReplyRepository replyRepository;
+    // private final MemberRepository memberRepository;
 
+    @Transactional
     @Override
     public Long register(BoardDTO dto) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'register'");
+
+        return boardRepository.save(dtoToEntity(dto)).getBno();
     }
 
     @Override
@@ -58,9 +64,12 @@ public class BoradServiceImpl implements BoardService {
 
     }
 
+    @Transactional
     @Override
     public void delete(Long bno) {
-
+        // 댓글
+        replyRepository.deleteByBno(bno);
+        // 원본글 삭제
         boardRepository.deleteById(bno);
     }
 
