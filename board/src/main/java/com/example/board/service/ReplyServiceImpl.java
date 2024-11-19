@@ -22,8 +22,7 @@ public class ReplyServiceImpl implements ReplyService {
 
     @Override
     public Long register(ReplyDTO dto) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'register'");
+        return replyRepository.save(dtoToEntity(dto)).getRno();
     }
 
     @Override
@@ -35,20 +34,19 @@ public class ReplyServiceImpl implements ReplyService {
 
     @Override
     public ReplyDTO read(Long rno) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'read'");
+        return entityToDto(replyRepository.findById(rno).get());
     }
 
     @Override
     public Long modify(ReplyDTO dto) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'modify'");
+        Reply reply = replyRepository.findById(dto.getRno()).get();
+        reply.setText(dto.getText());
+        return replyRepository.save(reply).getRno();
     }
 
     @Override
     public void remove(Long rno) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'remove'");
+        replyRepository.deleteById(rno);
     }
 
 }

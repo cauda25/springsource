@@ -176,4 +176,14 @@ public class BoardRepositoryTest {
         list.forEach(b -> System.out.println(b));
     }
 
+    @Test
+    public void testReplyUpdate() {
+
+        Reply reply = replyRepository.findById(112L).get();
+        System.out.println("reply " + reply);
+
+        reply.setText("내용수정");
+        System.out.println(replyRepository.save(reply));
+    }
+
 }
