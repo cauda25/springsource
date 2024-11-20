@@ -7,5 +7,14 @@
   </head>
   <body>
     <h1>member</h1>
+
+    <!-- username : id -->
+    <h3>[[${#authentication.name}]]</h3>
+    <h3 sec:authentication="name"></h3>
+
+    <h3>[[${#authentication.principal}]]</h3>
+    <h3>[[${#authentication.principal.enabled}]]</h3>
+
+    <a th:href="@{/member/logout}">로그아웃</a>
   </body>
 </html>
