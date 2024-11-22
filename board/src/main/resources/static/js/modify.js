@@ -16,5 +16,6 @@ document.querySelector(".btn-outline-danger").addEventListener("click", () => {
 document.querySelector(".btn-outline-info").addEventListener("click", (e) => {
   actionFrom.method = "get";
   actionFrom.querySelector("[name='bno']").remove;
+  actionFrom.querySelector("[name='writerEmail']").remove;
   actionFrom.submit();
 });

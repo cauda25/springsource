@@ -13,11 +13,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.annotation.Commit;
 
 import com.example.board.entity.Board;
 import com.example.board.entity.Member;
 import com.example.board.entity.Reply;
+import com.example.board.entity.role.MemberRole;
 import com.example.board.repository.BoardRepository;
 import com.example.board.repository.MemberRepository;
 import com.example.board.repository.ReplyRepository;
@@ -36,6 +38,9 @@ public class BoardRepositoryTest {
     @Autowired
     private ReplyRepository replyRepository;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @Test
     public void insertMember() {
         // 30명
@@ -44,7 +49,8 @@ public class BoardRepositoryTest {
             Member member = Member.builder()
                     .email("user" + i + "@gmail.com")
                     .name("member" + i)
-                    .password("12345")
+                    .password(passwordEncoder.encode("1111"))
+                    .role(MemberRole.MEMBER)
                     .build();
 
             memberRepository.save(member);
@@ -70,22 +76,22 @@ public class BoardRepositoryTest {
         });
     }
 
-    @Test
-    public void insertReply() {
-        // 100개
-        LongStream.rangeClosed(1, 100).forEach(i -> {
-            long bno = (long) (Math.random() * 100) + 1;
-            Board board = Board.builder().bno(bno).build();
+    // @Test
+    // public void insertReply() {
+    // // 100개
+    // LongStream.rangeClosed(1, 100).forEach(i -> {
+    // long bno = (long) (Math.random() * 100) + 141;
+    // Board board = Board.builder().bno(bno).build();
 
-            Reply reply = Reply.builder()
-                    .replyer("guest" + i)
-                    .text("test" + i)
-                    .board(board)
-                    .build();
+    // Reply reply = Reply.builder()
+    // .replyer("guest" + i)
+    // .text("test" + i)
+    // .board(board)
+    // .build();
 
-            replyRepository.save(reply);
-        });
-    }
+    // replyRepository.save(reply);
+    // });
+    // }
 
     @Transactional
     @Test

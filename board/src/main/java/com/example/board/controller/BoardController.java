@@ -1,5 +1,6 @@
 package com.example.board.controller;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
@@ -39,6 +40,7 @@ public class BoardController {
         model.addAttribute("result", result);
     }
 
+    // 주소줄 남음 => SecurityConfig 해결 하는 방법
     @GetMapping({ "/read", "/modify" })
     public void getMethodName(@RequestParam Long bno, @ModelAttribute("requestDTO") PageRequestDTO requestDTO,
             Model model) {
@@ -48,6 +50,8 @@ public class BoardController {
         model.addAttribute("dto", dto);
     }
 
+    // 로그인 사용자 == 작성자
+    @PreAuthorize("authentication.name == #dto.writerEmail")
     @PostMapping("/modify")
     public String postMethodName(BoardDTO dto, @ModelAttribute(name = "requestDTO") PageRequestDTO requestDTO,
             RedirectAttributes rttr) {
@@ -64,8 +68,10 @@ public class BoardController {
     }
 
     // @Transactional
+    @PreAuthorize("authentication.name == #writerEmail")
     @PostMapping("/remove")
-    public String postRemove(@RequestParam Long bno, @ModelAttribute(name = "requestDTO") PageRequestDTO requestDTO,
+    public String postRemove(@RequestParam Long bno, String writerEmail,
+            @ModelAttribute(name = "requestDTO") PageRequestDTO requestDTO,
             RedirectAttributes rttr) {
         log.info("삭제 요청 {}", bno);
         boardService.delete(bno);
@@ -77,12 +83,14 @@ public class BoardController {
         return "redirect:list";
     }
 
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/create")
     public void getMethodName(@ModelAttribute("dto") BoardDTO dto,
             @ModelAttribute(name = "requestDTO") PageRequestDTO requestDTO) {
         log.info("작성 폼 요청");
     }
 
+    @PreAuthorize("isAuthenticated()")
     @PostMapping("/create")
     public String postMethodName(@Valid @ModelAttribute("dto") BoardDTO dto, BindingResult result,
             @ModelAttribute(name = "requestDTO") PageRequestDTO requestDTO,
