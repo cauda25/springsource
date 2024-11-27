@@ -67,8 +67,8 @@
           tags += `<img src="/upload/display?fileName=${file.thumbImageURL}">`;
           tags += `<a href="${file.imageURL}"><i class="fa-solid fa-xmark"></i></a>`;
           tags += `</div>`;
-          output.insertAdjacentHTML("beforeend", tags);
         });
+        output.insertAdjacentHTML("beforeend", tags);
       }
 
       document.querySelector("#uploadBtn").addEventListener("click", () => {

@@ -64,5 +64,23 @@ public class MovieController {
     @GetMapping("/create")
     public void getCreate(@ModelAttribute("requestDto") PageRequestDTO pageRequestDTO) {
         log.info("영화 작성 폼 요청");
+
     }
+
+    @PostMapping("/create")
+    public String postCreate(MovieDTO movieDto, @ModelAttribute("requestDto") PageRequestDTO pageRequestDTO,
+            RedirectAttributes rttr) {
+        log.info("영화 등록 {}", movieDto);
+
+        Long mno = movieService.register(movieDto);
+
+        rttr.addAttribute("mno", mno);
+        rttr.addAttribute("page", 1);
+        rttr.addAttribute("size", pageRequestDTO.getSize());
+        rttr.addAttribute("type", pageRequestDTO.getType());
+        rttr.addAttribute("keyword", pageRequestDTO.getKeyword());
+        return "redirect:/movie/read";
+
+    }
+
 }
