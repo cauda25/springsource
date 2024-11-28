@@ -58,6 +58,13 @@
         </main>
       </div>
     </div>
+    <!-- 검색 시 이동할 폼 -->
+    <form th:action="@{/movie/list}" method="get" id="searchForm">
+      <input type="hidden" name="page" th:value="${requestDto.page}" />
+      <input type="hidden" name="size" th:value="${requestDto.size}" />
+      <input type="hidden" name="type" th:value="t" />
+      <input type="hidden" name="keyword" th:value="${requestDto.keyword}" />
+    </form>
     <!-- 모달 -->
     <div
       class="modal fade"
@@ -97,6 +104,7 @@
       integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
       crossorigin="anonymous"
     ></script>
+    <script th:src="@{/js/search.js}"></script>
     <!-- 페이지 별 js 영역 -->
     <th:block layout:fragment="js"></th:block>
   </body>

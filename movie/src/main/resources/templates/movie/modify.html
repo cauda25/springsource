@@ -70,11 +70,12 @@
         <ul>
           <li
             th:each="movieImage : ${movieDto.movieImageDTOs}"
-            th:attr="data-file=${movieImage.getThumbImageURL()},data-name=${movieImage.getImgName()},data-path=${movieImage.getPath()},data-uuid=${movieImage.getUuid()}"
-            data-bs-toggle="modal"
-            data-bs-target="#imgModal"
+            th:attr="data-name=${movieImage.getImgName()},data-path=${movieImage.getPath()},data-uuid=${movieImage.getUuid()}"
           >
             <img
+              th:attr="data-file=${movieImage.getThumbImageURL()}"
+              data-bs-toggle="modal"
+              data-bs-target="#imgModal"
               th:src="|/upload/display?fileName=${movieImage.getThumbImageURL()}|"
               th:if="${movieImage.path != null}"
               alt=""

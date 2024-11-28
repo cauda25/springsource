@@ -39,7 +39,8 @@ public class MovieServiceImpl implements MovieService {
     public PageResultDTO<MovieDTO, Object[]> getList(PageRequestDTO pageRequestDTO) {
         Pageable pageable = pageRequestDTO.getPageable(Sort.by("mno").descending());
 
-        Page<Object[]> result = movieImageRepository.getTotalList(null, null, pageable);
+        Page<Object[]> result = movieImageRepository.getTotalList(pageRequestDTO.getType(), pageRequestDTO.getKeyword(),
+                pageable);
 
         Function<Object[], MovieDTO> function = (en -> entityToDto((Movie) en[0],
                 (List<MovieImage>) Arrays.asList((MovieImage) en[1]),

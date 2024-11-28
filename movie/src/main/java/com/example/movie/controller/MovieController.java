@@ -32,7 +32,7 @@ public class MovieController {
 
     @GetMapping("/list")
     public void getList(@ModelAttribute("requestDto") PageRequestDTO pageRequestDTO, Model model) {
-        log.info("전체 movie list 요청");
+        log.info("전체 movie list 요청 {}", pageRequestDTO);
 
         PageResultDTO<MovieDTO, Object[]> result = movieService.getList(pageRequestDTO);
 
