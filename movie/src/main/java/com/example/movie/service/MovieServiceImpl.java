@@ -60,10 +60,21 @@ public class MovieServiceImpl implements MovieService {
         return movie.getMno();
     }
 
+    @Transactional
     @Override
     public Long modify(MovieDTO mDto) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'modify'");
+        Map<String, Object> entityMap = dtoToEntity(mDto);
+        Movie movie = (Movie) entityMap.get("movie");
+        List<MovieImage> movieImages = (List<MovieImage>) entityMap.get("movieImages");
+
+        movieImageRepository.save(movie);
+
+        // 기존의 영화 이미지 제거
+        movieImageRepository.deleteByMovie(movie);
+
+        movieImages.forEach(movieImage -> movieImageRepository.save(movieImage));
+
+        return movie.getMno();
     }
 
     @Transactional
