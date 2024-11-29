@@ -18,7 +18,7 @@ public interface ReviewService {
 
     Long modifyReview(ReviewDTO reviewDTO);
 
-    void removeReview(Long reviewDTO);
+    void removeReview(Long reviewNo);
 
     default ReviewDTO entityToDto(Review review) {
 
