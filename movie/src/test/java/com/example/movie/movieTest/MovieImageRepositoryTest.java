@@ -47,4 +47,10 @@ public class MovieImageRepositoryTest {
             System.out.println(Arrays.toString(objects));
         }
     }
+
+    @Test
+    public void testGetOldFile() {
+        List<MovieImage> oldList = movieImageRepository.findOldFileAll();
+        System.out.println(oldList);
+    }
 }

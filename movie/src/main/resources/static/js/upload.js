@@ -23,6 +23,9 @@ fileImput.addEventListener("change", (e) => {
   }
   fetch("/upload/upload", {
     method: "post",
+    headers: {
+      "X-CSRF-TOKEN": csrfValue,
+    },
     body: formDate,
   })
     .then((response) => response.json())
