@@ -1,6 +1,8 @@
 package com.example.movie.task;
 
 import java.io.File;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -33,7 +35,8 @@ public class FileCheckTask {
         return result.replace("-", File.separator);
     }
 
-    @Scheduled(cron = "0 * * * * *")
+    // 초,분,시간,day of month,월,day of week
+    @Scheduled(cron = "0 0 2 * * *")
     private void checkFile() {
         log.info("file check 메소드 실행");
 
@@ -50,10 +53,24 @@ public class FileCheckTask {
         }).collect(Collectors.toList());
 
         // upload/2024/12/03/~~~~~_1.jpg
+        List<Path> filePaths = movieImageDTOs.stream()
+                .map(dto -> Paths.get(uploadPath, dto.getImageURL(), dto.getUuid() + "_" + dto.getImgName()))
+                .collect(Collectors.toList());
+
         // upload/2024/12/03/s_~~~~~_1.jpg
+        movieImageDTOs.stream()
+                .map(dto -> Paths.get(uploadPath, dto.getImageURL(), "s_" + dto.getUuid() + "_" + dto.getImgName()))
+                .forEach(p -> filePaths.add(p));
+        ;
 
         // 어제날짜의 파일 목록 추출
+        File targetDir = Paths.get(uploadPath, getYesterDayFolder()).toFile();
+        File[] removeFiles = targetDir.listFiles(f -> filePaths.contains(f.toPath()) == false);
 
         // 비교후 db 목록과 일치 하지 않는 파일 제거
+        for (File file : removeFiles) {
+            log.info("remove file {}", file.getAbsolutePath());
+            file.delete();
+        }
     }
 }
