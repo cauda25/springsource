@@ -16,6 +16,8 @@ public interface BookService {
 
     List<BookDTO> getList(PageRequestDTO requestDTO);
 
+    int getTotalCnt(PageRequestDTO requestDTO);
+
     Long update(BookDTO dto);
 
     void delete(Long id);

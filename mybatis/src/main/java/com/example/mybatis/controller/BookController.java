@@ -17,7 +17,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.example.mybatis.dto.BookDTO;
 import com.example.mybatis.dto.CategoryDTO;
 import com.example.mybatis.dto.PageRequestDTO;
-import com.example.mybatis.dto.PageResultDTO;
 import com.example.mybatis.dto.PublisherDTO;
 
 import com.example.mybatis.service.BookService;
@@ -25,7 +24,6 @@ import com.example.mybatis.service.BookService;
 import jakarta.validation.Valid;
 
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 
 @RequiredArgsConstructor
 @Log4j2
@@ -38,6 +36,11 @@ public class BookController {
     @GetMapping("/list")
     public void getMethodName(@ModelAttribute(name = "rqdto") PageRequestDTO requestDTO, Model model) {
         log.info("list 요청 {}", requestDTO);
+        List<BookDTO> result = bookService.getList(requestDTO);
+        int total = bookService.getTotalCnt(requestDTO);
+
+        log.info("list {}", result);
+        log.info("total {}", total);
 
     }
 
