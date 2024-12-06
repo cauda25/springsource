@@ -14,4 +14,10 @@ public interface BookMapper {
     public List<BookDTO> listAll(PageRequestDTO requestDTO);
 
     public int totalCnt(PageRequestDTO requestDTO);
+
+    public int update(BookDTO dto);
+
+    public int delete(Long id);
+
+    public int create(BookDTO dto);
 }

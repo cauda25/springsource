@@ -6,13 +6,45 @@
 
 <mapper namespace="com.example.mybatis.mapper.BookMapper">
 
+<select id="categories" resultType="com.example.mybatis.dto.CategoryDTO">
+    select c.category_id as id, c.CATEGORY_NAME
+    from CATEGORY c 
+  </select>
+
+  <select id="publisher" resultType="com.example.mybatis.dto.PublisherDTO">
+    select p.publisher_id as id, p.PUBLISHER_NAME
+    from PUBLISHER p
+  </select>
+
+  <insert id="create">
+    insert into booktbl(book_id,title,writer,price,sale_price,create_date_time,last_modify_date_time,CATEGORY_ID,PUBLISHER_ID)
+    values(book_seq.nextval,#{title},#{writer},#{price},#{salePrice},current_timestamp,current_timestamp,#{categoryName},#{publisherName})
+  </insert>
+
+  <update id="update">
+    update booktbl
+    SET price = #{price}, sale_price = #{salePrice}, last_modify_date_time = current_timestamp
+    where book_id = #{id}
+  </update>
+
+  <delete id="delete">
+    delete from booktbl
+    where book_id = #{id}
+  </delete>
+
 
   <select id="read" resultType="com.example.mybatis.dto.BookDTO">
-    select * from booktbl b where b.book_id = #{id}
+    select b.book_id as id, b.title, b.writer, b.price, b.sale_price, b.create_date_time, bp.publisher_id, bp.PUBLISHER_NAME, bc.category_id, bc.CATEGORY_NAME
+    from booktbl b 
+        JOIN BOOK_PUBLISHER bp ON
+	              	b.PUBLISHER_PUBLISHER_ID = bp.PUBLISHER_ID
+	      JOIN BOOK_CATEGORY bc ON
+	              	b.CATEGORY_CATEGORY_ID = bc.CATEGORY_ID
+    where b.book_id = #{id}
   </select>
   <select id="listAll" resultType="com.example.mybatis.dto.BookDTO">
   <![CDATA[
-    SELECT t.book_id,t.title,t.writer,t.publisher_id,t.PUBLISHER_NAME, t.category_id, t.CATEGORY_NAME
+    SELECT t.book_id as id,t.title,t.writer,t.publisher_id,t.PUBLISHER_NAME, t.category_id, t.CATEGORY_NAME
     FROM (SELECT
 	              rownum rn,
 	              b1.*
@@ -30,6 +62,7 @@
 	              	b.BOOK_ID DESC) b1
     WHERE
   ]]>
+  <!-- 동적 쿼리 작성 id="criteria" 를 불러와줌-->
         <include refid="criteria"></include>
   <![CDATA[ 
              rownum <= (#{page} * #{size})) t
@@ -41,7 +74,11 @@
 
   <select id="totalCnt" resultType="int">
     select count(*)
-    from booktbl 
+    from booktbl b
+                JOIN BOOK_PUBLISHER bp ON
+	              	b.PUBLISHER_PUBLISHER_ID = bp.PUBLISHER_ID
+	              JOIN BOOK_CATEGORY bc ON
+	              	b.CATEGORY_CATEGORY_ID = bc.CATEGORY_ID
     where 
         <include refid="criteria"></include> 
          book_id > 0
@@ -57,9 +94,9 @@
                     <when test="type =='c'.toString()">
                         CATEGORY_NAME like '%'||#{keyword}||'%'
                     </when>
-                    <otherwise>
+                    <when test="type =='w'.toString()">
                         writer like '%'||#{keyword}||'%'
-                    </otherwise>
+                    </when>
                 </choose>
             </trim>
         </trim>

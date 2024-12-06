@@ -27,13 +27,13 @@ public class BookServiceImpl implements BookService {
     private final BookMapper bookMapper;
 
     @Override
-    public Long create(BookDTO dto) {
-        return null;
+    public boolean create(BookDTO dto) {
+        return bookMapper.create(dto) == 1 ? true : false;
     }
 
     @Override
     public BookDTO getRow(Long id) {
-        return null;
+        return bookMapper.read(id);
     }
 
     @Override
@@ -42,13 +42,13 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public Long update(BookDTO dto) {
-        return null;
+    public boolean update(BookDTO dto) {
+        return bookMapper.update(dto) == 1 ? true : false;
     }
 
     @Override
-    public void delete(Long id) {
-
+    public boolean delete(Long id) {
+        return bookMapper.delete(id) == 1 ? true : false;
     }
 
     @Override

@@ -17,6 +17,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.example.mybatis.dto.BookDTO;
 import com.example.mybatis.dto.CategoryDTO;
 import com.example.mybatis.dto.PageRequestDTO;
+import com.example.mybatis.dto.PageResultDTO;
 import com.example.mybatis.dto.PublisherDTO;
 
 import com.example.mybatis.service.BookService;
@@ -42,6 +43,8 @@ public class BookController {
         log.info("list {}", result);
         log.info("total {}", total);
 
+        model.addAttribute("result", new PageResultDTO<>(requestDTO, total, result));
+
     }
 
     @GetMapping(value = { "/read", "/modify" })
@@ -57,14 +60,18 @@ public class BookController {
             RedirectAttributes rttr) {
         log.info("도서 변경 요청 {}", dto);
         log.info("requestDTO {}", requestDTO);
-        Long id = bookService.update(dto);
+        if (bookService.update(dto)) {
+            rttr.addAttribute("id", dto.getId());
+            rttr.addAttribute("page", requestDTO.getPage());
+            rttr.addAttribute("size", requestDTO.getSize());
+            rttr.addAttribute("type", requestDTO.getType());
+            rttr.addAttribute("keyword", requestDTO.getKeyword());
+            return "redirect:read";
 
-        rttr.addAttribute("id", id);
-        rttr.addAttribute("page", requestDTO.getPage());
-        rttr.addAttribute("size", requestDTO.getSize());
-        rttr.addAttribute("type", requestDTO.getType());
-        rttr.addAttribute("keyword", requestDTO.getKeyword());
-        return "redirect:read";
+        } else {
+            return "/book/modify";
+        }
+
     }
 
     @PostMapping("/remove")
@@ -111,7 +118,11 @@ public class BookController {
 
         Long id = bookService.create(dto);
 
-        rttr.addFlashAttribute("msg", id + " 번 도서가 등록 되었습니다.");
+        rttr.addFlashAttribute("msg", "도서가 등록 되었습니다.");
+        rttr.addAttribute("page", 1);
+        rttr.addAttribute("size", requestDTO.getSize());
+        rttr.addAttribute("type", requestDTO.getType());
+        rttr.addAttribute("keyword", requestDTO.getKeyword());
 
         return "redirect:list";
     }
